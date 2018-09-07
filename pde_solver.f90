@@ -5,6 +5,7 @@ program pde_solver
   use output, only: write_output
   use grid, only: set_grid, set_dt
   use init, only: set_init
+  use step, only: step_1
   implicit none
 
   ! Specify the velocity:
@@ -18,23 +19,26 @@ program pde_solver
   ! Instantiate the x array
   real :: xs(0:nx)
 
-  ! Set up iteration parameters and dt
+  ! Set up iteration parameters and time and step data
   integer :: i, n, j
   real :: dt
+  real :: t = 0.
+  real :: tmax = 1.000
+  integer :: istep = 0
 
   ! Create the array for the velocities
   real :: u(0:nx)
   real :: up(0:nx)
 
-  real :: t = 0.
-  real :: tmax = 1.000
-  integer :: istep = 0
-
   ! Choose the method to use
-  integer :: choice
+  integer :: meth_choice, init_choice
+
+  print*,'choose initial conditions:'
+  print*,'Box function (0)'
+  read*.init_choice
 
   print*,'choose method: FTCS (0), Lax (1)'
-  read*, choice
+  read*, meth_choice
 
   call set_dt(dt, dx, v)
 
@@ -46,18 +50,10 @@ program pde_solver
 
   do while(t < tmax)
 
-    t = t + dt
-    istep = istep + 1
-
-    up = u
-    do j=0,nx
-      call scheme(u, up, n, j, dx, dt, v, nx, choice)
-    end do
+    call step_1(t, istep, u, n, dx, dt, v, nx, meth_choice)
     call write_output(istep,nx,xs,u,t)
   end do
   print*,'finished writing numeric solution to file'
-
-  close(1)
 
 
 end program pde_solver
