@@ -3,6 +3,7 @@
 program pde_solver
   use pde_routines, only: scheme, initial, boundary
   use output, only: write_output
+  use grid, only: set_grid, set_dt
   implicit none
 
   ! Specify the velocity:
@@ -13,9 +14,11 @@ program pde_solver
   integer, parameter :: nx = 100
   real,parameter :: dx = lx/nx
 
-  ! Create the x array
+  ! Instantiate the x array
+  real :: xs(0:nx)
+
+  ! Set up iteration parameters and dt
   integer :: i, n, j
-  real :: xs(0:nx) = 0
   real :: dt
 
   ! Create the array for the velocities
@@ -26,26 +29,21 @@ program pde_solver
   real :: tmax = 1.000
   integer :: istep = 0
 
+  ! Choose the method to use
   integer :: choice
 
   print*,'choose method: FTCS (0), Lax (1)'
   read*, choice
 
+  call set_dt(dt, dx, v)
 
-  dt = 0.5*dx/v
-
-  ! Construct and x and t arrays
-  xs = (/(i*dx, i=0,nx)/)
+  call set_grid(xs, nx, dx)
 
   call initial(u, xs, nx)
 
   call write_output(istep,nx,xs,u,t)
 
   do while(t < tmax)
-
-    ! if (abs(t-0.0) < 1e-4 .or. abs(t-0.2) < 1e-4 .or. &
-    !  abs(t-0.5) < 1e-4 .or. abs(t-1.0) < 1e-4) then
-    !end if
 
     t = t + dt
     istep = istep + 1
@@ -56,7 +54,7 @@ program pde_solver
     end do
     call write_output(istep,nx,xs,u,t)
   end do
-  print*,'finished writing numeric solution to file, wo'
+  print*,'finished writing numeric solution to file'
 
   close(1)
 

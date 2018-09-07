@@ -38,5 +38,6 @@ for i, file in enumerate(files):
     plt.ylabel(r'$u(x,t)$')
     plt.title(r'solution at $t={}$'.format(np.round(t,2)))
     plt.tight_layout()
-    plt.savefig('../code_document/lax_t{}.pdf'.format(i))
+    plt.show()
+    #plt.savefig('../code_document/lax_t{}.pdf'.format(i))
     plt.clf()
