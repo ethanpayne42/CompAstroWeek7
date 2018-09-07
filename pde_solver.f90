@@ -15,18 +15,19 @@ program pde_solver
   real, parameter :: lx = 1.
   integer, parameter :: nx = 100
   real,parameter :: dx = lx/nx
+  integer,parameter :: n = nx-1
 
   ! Instantiate the x array
-  real :: xs(0:nx)
+  real :: xs(0:n)
 
   ! Set up iteration parameters and time and step data
   real :: dt
   real :: t = 0.
-  real :: tmax = 1.000
+  real :: tmax = 1.0
   integer :: istep = 0
 
   ! Create the array for the velocities
-  real :: u(0:nx)
+  real :: u(0:n)
 
   ! Choose the method to use
   integer :: meth_choice, init_choice
@@ -34,24 +35,25 @@ program pde_solver
   print*,'choose initial conditions:'
   print*,'Box function (0)'
   print*,'Sin function (1)'
+  print*,'Straight line (2)'
   read*, init_choice
 
   print*,'choose method:'
   print*,'FTCS (0)'
   print*,'Lax (1)'
   print*,'Upwind (2)'
-  print*,'LW (3)'
+  print*,'Lax-Wendroff (3)'
   read*, meth_choice
 
   call set_dt(dt, dx, v)
-  call set_grid(xs, nx, dx)
-  call set_init(u, xs, nx, init_choice)
-  call write_output(istep,nx,xs,u,t)
+  call set_grid(xs, n, dx)
+  call set_init(u, xs, n, init_choice)
+  call write_output(istep,n,xs,u,t)
 
   do while(t < tmax)
 
-    call step_1(t, istep, u, dx, dt, v, nx, meth_choice)
-    call write_output(istep,nx,xs,u,t)
+    call step_1(t, istep, u, dx, dt, v, n, meth_choice)
+    call write_output(istep,n,xs,u,t)
   end do
   print*,'finished writing numeric solution to file'
 

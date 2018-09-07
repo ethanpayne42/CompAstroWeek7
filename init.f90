@@ -21,7 +21,9 @@ subroutine set_init(u, xs, nx, choice)
           u(ind) = 0
         end if
       case(1)
-        u(ind) = 1./2 + 1./2*sin(2*pi*xs(ind))
+        u(ind) = sin(2*pi*xs(ind))
+      case(2)
+        u(ind) = xs(ind)
     end select
   end do
 

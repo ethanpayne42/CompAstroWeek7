@@ -35,7 +35,7 @@ for i, file in enumerate(files):
 
     plt.plot(xs, us)
     plt.xlim(0,1)
-    plt.ylim(-0.05,1.5)
+    plt.ylim(-1.1,1.1)
     plt.xlabel(r'$x$')
     plt.ylabel(r'$u(x,t)$')
     plt.title(r'solution at $t={}$'.format(np.round(t,2)))

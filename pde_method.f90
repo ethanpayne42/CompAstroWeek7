@@ -51,7 +51,7 @@ contains
       u(j) = upwind(u0, u1, un1, fac)
     case(3)
       fac =(dt/dx)*v
-      u(j) = LW(u0, u1, un1, fac)
+      u(j) = upwind(u0, u1, un1, fac)
     end select
 
   end subroutine scheme
