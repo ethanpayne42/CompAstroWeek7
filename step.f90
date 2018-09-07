@@ -5,9 +5,9 @@ module step
 contains
 
   subroutine step_1(t, istep, u, &
-    n, dx, dt, v, nx, choice)
+    dx, dt, v, nx, choice)
 
-    integer :: istep, n, nx, choice, j
+    integer :: istep, nx, choice, j
     real :: t, v, dx, dt
     real :: u(0:), up(0:nx)
 
@@ -17,7 +17,7 @@ contains
 
     up = u
     do j=0,nx
-      call scheme(u, up, n, j, dx, dt, v, nx, choice)
+      call scheme(u, up, j, dx, dt, v, nx, choice)
     end do
 
   end subroutine step_1

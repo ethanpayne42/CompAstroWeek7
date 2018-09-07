@@ -20,7 +20,6 @@ program pde_solver
   real :: xs(0:nx)
 
   ! Set up iteration parameters and time and step data
-  integer :: i, n, j
   real :: dt
   real :: t = 0.
   real :: tmax = 1.000
@@ -28,29 +27,31 @@ program pde_solver
 
   ! Create the array for the velocities
   real :: u(0:nx)
-  real :: up(0:nx)
 
   ! Choose the method to use
   integer :: meth_choice, init_choice
 
   print*,'choose initial conditions:'
   print*,'Box function (0)'
-  read*.init_choice
+  print*,'Sin function (1)'
+  read*, init_choice
 
-  print*,'choose method: FTCS (0), Lax (1)'
+  print*,'choose method:'
+  print*,'FTCS (0)'
+  print*,'Lax (1)'
   read*, meth_choice
 
   call set_dt(dt, dx, v)
 
   call set_grid(xs, nx, dx)
 
-  call set_init(u, xs, nx)
+  call set_init(u, xs, nx, init_choice)
 
   call write_output(istep,nx,xs,u,t)
 
   do while(t < tmax)
 
-    call step_1(t, istep, u, n, dx, dt, v, nx, meth_choice)
+    call step_1(t, istep, u, dx, dt, v, nx, meth_choice)
     call write_output(istep,nx,xs,u,t)
   end do
   print*,'finished writing numeric solution to file'
