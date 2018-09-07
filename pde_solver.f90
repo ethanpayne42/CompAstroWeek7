@@ -1,9 +1,10 @@
 ! Program for the solving of Burger's Equation
 
 program pde_solver
-  use pde_routines, only: scheme, initial, boundary
+  use pde_method, only: scheme
   use output, only: write_output
   use grid, only: set_grid, set_dt
+  use init, only: set_init
   implicit none
 
   ! Specify the velocity:
@@ -39,7 +40,7 @@ program pde_solver
 
   call set_grid(xs, nx, dx)
 
-  call initial(u, xs, nx)
+  call set_init(u, xs, nx)
 
   call write_output(istep,nx,xs,u,t)
 

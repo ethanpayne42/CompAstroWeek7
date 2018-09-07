@@ -21,12 +21,14 @@ params = {
    }
 mpl.rcParams.update(params)
 
+dir = 'data/'
+
 files = ['output_00000.dat', 'output_00040.dat','output_00100.dat',
          'output_00200.dat']
 
 for i, file in enumerate(files):
 
-    data = np.genfromtxt(file)
+    data = np.genfromtxt(dir+file)
     xs = data[1:,0]
     us = data[1:,1]
     t = data[0,0]

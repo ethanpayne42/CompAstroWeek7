@@ -1,40 +1,10 @@
 ! Module for the PDE routines required
 
-module pde_routines
+module pde_method
 
   implicit none
 
 contains
-
-  ! Subroutine for to fill the initial conditions of
-  ! the array
-  subroutine initial(u,xs, nx)
-    real :: u(0:nx)
-    real :: xs(0:nx)
-    integer :: nx
-
-    integer :: ind
-
-    do ind=0,nx
-      if (xs(ind) > 0.25 .and. xs(ind) < 0.75) then
-        u(ind) = 1
-      else
-        u(ind) = 0
-      end if
-    end do
-
-  end subroutine initial
-
-  ! Boundaries
-  subroutine boundary(u, up, nx, i)
-    real :: u(0:nx), up(0:nx)
-    integer :: nx, i
-
-    ! TODO this is dodgy but roll with it for now
-    u(0) = up(nx)
-    u(nx) = up(nx)
-
-  end subroutine boundary
 
   ! Subroutine for the scheme
   subroutine scheme(u, up, n, j, dx, dt, v, nx, choice)
@@ -66,4 +36,4 @@ contains
   end subroutine scheme
 
 
-end module pde_routines
+end module pde_method
