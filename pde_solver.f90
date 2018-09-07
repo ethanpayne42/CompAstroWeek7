@@ -56,7 +56,7 @@ program pde_solver
     end do
     call write_output(istep,nx,xs,u,t)
   end do
-  print*,'finished writing numeric solution to file'
+  print*,'finished writing numeric solution to file, wo'
 
   close(1)
 
