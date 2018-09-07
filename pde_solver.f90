@@ -40,14 +40,12 @@ program pde_solver
   print*,'FTCS (0)'
   print*,'Lax (1)'
   print*,'Upwind (2)'
+  print*,'LW (3)'
   read*, meth_choice
 
   call set_dt(dt, dx, v)
-
   call set_grid(xs, nx, dx)
-
   call set_init(u, xs, nx, init_choice)
-
   call write_output(istep,nx,xs,u,t)
 
   do while(t < tmax)
