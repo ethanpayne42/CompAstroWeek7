@@ -39,6 +39,7 @@ program pde_solver
   print*,'choose method:'
   print*,'FTCS (0)'
   print*,'Lax (1)'
+  print*,'Upwind (2)'
   read*, meth_choice
 
   call set_dt(dt, dx, v)

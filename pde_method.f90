@@ -36,15 +36,20 @@ contains
     real :: fac
     integer :: choice
     real :: u0, u1, un1
-    fac =(1./2.)*(dt/dx)*v
 
     call iterables(up,j, u0, un1, u1, nx)
 
-    if (choice==0) then
+    select case(choice)
+    case(0)
+      fac =(1./2.)*(dt/dx)*v
       u(j) = FTCS(u0, u1, un1, fac)
-    elseif (choice==1) then
+    case(1)
+      fac =(1./2.)*(dt/dx)*v
       u(j) = Lax(u0, u1, un1, fac)
-    end if
+    case(2)
+      fac =(dt/dx)*v
+      u(j) = upwind(u0, u1, un1, fac)
+    end select
 
   end subroutine scheme
 
