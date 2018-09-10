@@ -32,6 +32,12 @@ program pde_solver
   ! Choose the method to use
   integer :: meth_choice, init_choice
 
+  ! Set the Courant factor
+  real :: cou
+
+  print*,'Set the Courant factor'
+  read*,cou
+
   print*,'choose initial conditions:'
   print*,'Box function (0)'
   print*,'Sin function (1)'
@@ -45,7 +51,7 @@ program pde_solver
   print*,'Lax-Wendroff (3)'
   read*, meth_choice
 
-  call set_dt(dt, dx, v)
+  call set_dt(dt, dx, v, cou)
   call set_grid(xs, n, dx)
   call set_init(u, xs, n, init_choice)
   call write_output(istep,n,xs,u,t)

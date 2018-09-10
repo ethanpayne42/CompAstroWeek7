@@ -16,12 +16,10 @@ subroutine set_grid(xs, nx, dx)
 
 end subroutine set_grid
 
-subroutine set_dt(dt, dx, v)
-  real :: dt
-  real :: dx
-  real :: v
+subroutine set_dt(dt, dx, v, cou)
+  real :: dt, dx, v, cou
 
-  dt = 0.5*dx/v
+  dt = cou*dx/v
 end subroutine set_dt
 
 

@@ -9,7 +9,10 @@ OBJ=${SRC:.f90=.o}
 %.o: %.f90
 	$(FC) $(FFLAGS) -o $@ -c $<
 
-fdefault: advec
+fdefault:advec data
+
+data:
+	mkdir $@
 
 advec: $(OBJ)
 	$(FC) $(FFLAGS) -o $@ $(OBJ)
