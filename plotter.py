@@ -23,8 +23,11 @@ mpl.rcParams.update(params)
 
 dir = 'data/'
 
-files = ['output_00000.dat', 'output_00200.dat','output_00400.dat','output_00600.dat',
-         'output_00800.dat','output_01000.dat']
+choice = '2'
+
+files = ['output_'+choice+'_00000.dat', 'output_'+choice+'_00200.dat',
+         'output_'+choice+'_00400.dat','output_'+choice+'_00600.dat',
+         'output_'+choice+'_00800.dat','output_'+choice+'_01000.dat']
 
 for i, file in enumerate(files):
 

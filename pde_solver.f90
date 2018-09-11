@@ -54,12 +54,12 @@ program pde_solver
   call set_dt(dt, dx, v, cou)
   call set_grid(xs, n, dx)
   call set_init(u, xs, n, init_choice)
-  call write_output(istep,n,xs,u,t)
+  call write_output(istep,n,xs,u,t, meth_choice)
 
   do while(t < tmax)
 
     call step_1(t, istep, u, dx, dt, v, n, meth_choice)
-    call write_output(istep,n,xs,u,t)
+    call write_output(istep,n,xs,u,t, meth_choice)
   end do
   print*,'finished writing numeric solution to file'
 
