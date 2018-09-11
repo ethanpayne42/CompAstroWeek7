@@ -6,7 +6,7 @@ module pde_method
 
 contains
 
-  subroutine iterables(up,j, u0, un1, u1, nx)
+  subroutine bounds(up,j, u0, un1, u1, nx)
     ! Function to set the u0, un1, and u1
     real :: u0, u1, un1
     real :: up(0:)
@@ -26,7 +26,7 @@ contains
       un1 = up(j-1)
     end if
 
-  end subroutine iterables
+  end subroutine bounds
 
   ! Subroutine for the scheme
   subroutine scheme(u, up, j, dx, dt, v, nx, choice)
@@ -37,20 +37,17 @@ contains
     integer :: choice
     real :: u0, u1, un1
 
-    call iterables(up,j, u0, un1, u1, nx)
+    call bounds(up,j, u0, un1, u1, nx)
+    fac =(dt/dx)*v
 
     select case(choice)
     case(0)
-      fac =(1./2.)*(dt/dx)*v
       u(j) = FTCS(u0, u1, un1, fac)
     case(1)
-      fac =(1./2.)*(dt/dx)*v
       u(j) = Lax(u0, u1, un1, fac)
     case(2)
-      fac =(dt/dx)*v
       u(j) = upwind(u0, u1, un1, fac)
     case(3)
-      fac =(dt/dx)*v
       u(j) = LW(u0, u1, un1, fac)
     end select
 
