@@ -23,8 +23,8 @@ mpl.rcParams.update(params)
 
 dir = 'data/'
 
-files = ['output_00000.dat', 'output_00040.dat','output_00100.dat',
-         'output_00200.dat']
+files = ['output_00000.dat', 'output_00200.dat','output_00400.dat','output_00600.dat',
+         'output_00800.dat','output_01000.dat']
 
 for i, file in enumerate(files):
 
@@ -35,11 +35,11 @@ for i, file in enumerate(files):
 
     plt.plot(xs, us)
     plt.xlim(0,1)
-    plt.ylim(-1.1,1.1)
+    plt.ylim(-2,2)
     plt.xlabel(r'$x$')
     plt.ylabel(r'$u(x,t)$')
     plt.title(r'solution at $t={}$'.format(np.round(t,2)))
     plt.tight_layout()
-    plt.show()
-    #plt.savefig('../code_document/lax_t{}.pdf'.format(i))
+    #plt.show()
+    plt.savefig('../code_document/upwind_{}.pdf'.format(i))
     plt.clf()
