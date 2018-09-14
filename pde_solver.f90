@@ -21,7 +21,7 @@ program pde_solver
   real, allocatable :: u(:,:)
 
   ! Set up iteration parameters and time and step data
-  real :: dt
+  real :: dt, dtnew
   real :: t = 0.
   real :: tmax = 1.0
   integer :: istep = 0
@@ -54,8 +54,12 @@ program pde_solver
   call write_output(istep,nx,xs,u,t, nu)
 
   do while(t < tmax)
-    call step_1(t, istep, u, dx, dt, v, nx, nu)
+    t = t+ dt
+    call step_1(t, istep, u, dx, &
+                dt, nx, nu, dtnew, cou)
     call write_output(istep,nx,xs,u,t, nu)
+    dt = dtnew
+    print*,dt
   end do
   print*,'finished writing numeric solution to file'
 

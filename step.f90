@@ -1,20 +1,8 @@
 module step
+  use flux
   implicit none
 
 contains
-
-  function LW(u0, u1, un1, fac, nu) result(u_new)
-    integer :: nu
-    real :: u0(nu), u1(nu), un1(nu), fac
-    real :: u_new(nu), u1h(nu), un1h(nu)
-
-    u1h = (1./2)*(u0+u1) - (fac/2)*(u1-u0)
-    un1h = (1./2)*(un1+u0) - (fac/2)*(u0-un1)
-
-    u_new = u0 - fac*(u1h-un1h)
-
-  end function LW
-
   subroutine bounds(up,j, u0, un1, u1, nx, nu)
     ! Function to set the u0, un1, and u1
     integer :: nu
@@ -38,37 +26,60 @@ contains
 
   end subroutine bounds
 
-  subroutine scheme(u, up, j, dx, dt, v, nx, nu)
-    real :: dx, dt, v
+  subroutine scheme(u, up, j, dx, dt, nx, &
+    nu, lambda)
+    real :: dx, dt
     real :: u(:,0:), up(nu,0:nx)
     integer :: j, nx
     real :: fac
     real :: u0(nu), u1(nu), un1(nu)
+    real :: fp1(nu), fn1(nu)
     integer :: nu
+    real :: lambda_r, lambda_l, lambda
 
     call bounds(up,j, u0, un1, u1, nx, nu)
-    fac =(dt/dx)*v
-    u(:,j) = LW(u0, u1, un1, fac, nu)
+    fac = dt/dx
+
+    call get_flux(u0,u1,fp1,nu, lambda_r)
+    call get_flux(un1,u0,fn1,nu, lambda_l)
+
+    lambda = max(lambda_r,lambda_l)
+
+    u(:,j) = u0 - fac*(fp1-fn1)
 
   end subroutine scheme
 
   subroutine step_1(t, istep, u, &
-    dx, dt, v, nx, nu)
+    dx, dt, nx, nu, dtnew, cou)
     integer :: nu
     integer :: istep, nx, j
-    real :: t, v, dx, dt
+    real :: t, dx, dt
     real :: u(:,:), up(nu,0:nx)
+    real :: lambda, cou, dtnew
+    real :: lambda_max = 0
 
-
-    t = t + dt
     istep = istep + 1
 
     up = u
     do j=0,nx
-      call scheme(u, up, j, dx, dt, v, nx, nu)
+      call scheme(u, up, j, dx, dt, &
+                  nx, nu, lambda)
+
+      if ( lambda >  lambda_max) then
+        lambda_max = lambda
+      end if
     end do
 
+    call get_dtnew(dtnew,lambda_max,dx,cou)
+
   end subroutine step_1
+
+  subroutine get_dtnew(dtnew, lambda_max, dx, cou)
+    real :: cou, dtnew, lambda_max, dx
+
+    dtnew = cou*dx/lambda_max
+
+  end subroutine get_dtnew
 
 
 end module step

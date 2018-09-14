@@ -27,7 +27,7 @@ mpl.rcParams.update(params)
 
 dir = 'data/'
 
-i_s = ['00020', '00040','00060','00080','00100']
+i_s = ['00000','00020', '00040','00060','00080','00100']
 for i in i_s:
     file = file_str(i)
     data = np.genfromtxt(dir+file)
