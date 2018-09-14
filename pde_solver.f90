@@ -13,12 +13,12 @@ program pde_solver
 
   ! specify spacing
   real, parameter :: lx = 1.
-  integer, parameter :: nx = 100
-  real,parameter :: dx = lx/nx
-  integer,parameter :: n = nx-1
+  integer :: nx = 100
+  real :: dx
 
   ! Instantiate the x array
-  real :: xs(0:n)
+  real, allocatable :: xs(:)
+  real, allocatable :: u(:)
 
   ! Set up iteration parameters and time and step data
   real :: dt
@@ -26,14 +26,18 @@ program pde_solver
   real :: tmax = 1.0
   integer :: istep = 0
 
-  ! Create the array for the velocities
-  real :: u(0:n)
-
   ! Choose the method to use
   integer :: meth_choice, init_choice
 
   ! Set the Courant factor
   real :: cou
+
+  dx = lx/nx
+  nx = nx-1
+
+  ! Allocate array
+  allocate(xs(0:nx))
+  allocate(u(0:nx))
 
   print*,'Set the Courant factor'
   read*,cou
@@ -52,14 +56,14 @@ program pde_solver
   read*, meth_choice
 
   call set_dt(dt, dx, v, cou)
-  call set_grid(xs, n, dx)
-  call set_init(u, xs, n, init_choice)
-  call write_output(istep,n,xs,u,t, meth_choice)
+  call set_grid(xs, nx, dx)
+  call set_init(u, xs, nx, init_choice)
+  call write_output(istep,nx,xs,u,t, meth_choice)
 
   do while(t < tmax)
 
-    call step_1(t, istep, u, dx, dt, v, n, meth_choice)
-    call write_output(istep,n,xs,u,t, meth_choice)
+    call step_1(t, istep, u, dx, dt, v, nx, meth_choice)
+    call write_output(istep,nx,xs,u,t, meth_choice)
   end do
   print*,'finished writing numeric solution to file'
 
