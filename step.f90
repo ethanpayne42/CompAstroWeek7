@@ -1,5 +1,6 @@
 module step
   use flux
+  use physics, only: cons2prim
   implicit none
 
 contains
@@ -56,7 +57,7 @@ contains
     real :: t, dx, dt
     real :: u(:,:), up(nu,0:nx)
     real :: lambda, cou, dtnew
-    real :: lambda_max = 0
+    real :: lambdas(0:nx)
 
     istep = istep + 1
 
@@ -65,19 +66,21 @@ contains
       call scheme(u, up, j, dx, dt, &
                   nx, nu, lambda)
 
-      if ( lambda >  lambda_max) then
-        lambda_max = lambda
-      end if
+      lambdas(j) = lambda
     end do
 
-    call get_dtnew(dtnew,lambda_max,dx,cou)
+    call get_dtnew(dtnew,lambdas,dx,cou)
 
   end subroutine step_1
 
-  subroutine get_dtnew(dtnew, lambda_max, dx, cou)
-    real :: cou, dtnew, lambda_max, dx
+  subroutine get_dtnew(dtnew, lambdas, &
+    dx, cou)
+    real :: cou, dtnew, lambdas(:), dx
+    real :: factor
 
-    dtnew = cou*dx/lambda_max
+    factor = minval(dx/lambdas)
+
+    dtnew = cou*factor
 
   end subroutine get_dtnew
 

@@ -22,10 +22,11 @@ contains
 
   subroutine get_f(nu,u,f,lambda)
     integer :: nu
-    real :: f(nu), u(nu), lambda
+    real :: f(nu), u(nu), lambda, p(nu)
 
     f = (1./2.)*u(nu)**2
-    lambda = u(1)
+    call cons2prim(u,p,nu)
+    lambda = p(1)
 
   end subroutine get_f
 
