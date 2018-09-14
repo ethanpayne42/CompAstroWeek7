@@ -1,13 +1,15 @@
 module init
   use constants, only: pi
+  use physics
   implicit none
 
 contains
 
-subroutine set_init(u, xs, nx, choice)
+subroutine set_init(u, xs, nx, choice, nu)
   real :: u(:,0:)
+  real :: p(nu,0:nx)
   real :: xs(0:)
-  integer :: nx, choice
+  integer :: nx, choice, nu
 
   integer :: ind
 
@@ -16,15 +18,16 @@ subroutine set_init(u, xs, nx, choice)
     select case (choice)
       case(0)
         if (xs(ind) > 0.25 .and. xs(ind) < 0.75) then
-          u(:,ind) = 1
+          p(:,ind) = 1
         else
-          u(:,ind) = 0
+          p(:,ind) = 0
         end if
       case(1)
-        u(:,ind) = sin(2*pi*xs(ind))
+        p(:,ind) = sin(2*pi*xs(ind))
       case(2)
-        u(:,ind) = xs(ind)
+        p(:,ind) = xs(ind)
     end select
+    call prim2cons(u(:,ind),p(:,ind),nu)
   end do
 
 end subroutine set_init
