@@ -1,7 +1,6 @@
 ! Program for the solving of Burger's Equation
 
 program pde_solver
-  use pde_method, only: scheme
   use output, only: write_output
   use grid, only: set_grid, set_dt
   use init, only: set_init
@@ -14,11 +13,12 @@ program pde_solver
   ! specify spacing
   real, parameter :: lx = 1.
   integer :: nx = 100
+  integer :: nu = 1
   real :: dx
 
   ! Instantiate the x array
   real, allocatable :: xs(:)
-  real, allocatable :: u(:)
+  real, allocatable :: u(:,:)
 
   ! Set up iteration parameters and time and step data
   real :: dt
@@ -27,7 +27,7 @@ program pde_solver
   integer :: istep = 0
 
   ! Choose the method to use
-  integer :: meth_choice, init_choice
+  integer :: init_choice
 
   ! Set the Courant factor
   real :: cou
@@ -37,7 +37,7 @@ program pde_solver
 
   ! Allocate array
   allocate(xs(0:nx))
-  allocate(u(0:nx))
+  allocate(u(nu,0:nx))
 
   print*,'Set the Courant factor'
   read*,cou
@@ -48,22 +48,14 @@ program pde_solver
   print*,'Straight line (2)'
   read*, init_choice
 
-  print*,'choose method:'
-  print*,'FTCS (0)'
-  print*,'Lax (1)'
-  print*,'Upwind (2)'
-  print*,'Lax-Wendroff (3)'
-  read*, meth_choice
-
   call set_dt(dt, dx, v, cou)
   call set_grid(xs, nx, dx)
   call set_init(u, xs, nx, init_choice)
-  call write_output(istep,nx,xs,u,t, meth_choice)
+  call write_output(istep,nx,xs,u,t)
 
   do while(t < tmax)
-
-    call step_1(t, istep, u, dx, dt, v, nx, meth_choice)
-    call write_output(istep,nx,xs,u,t, meth_choice)
+    call step_1(t, istep, u, dx, dt, v, nx, nu)
+    call write_output(istep,nx,xs,u,t)
   end do
   print*,'finished writing numeric solution to file'
 
