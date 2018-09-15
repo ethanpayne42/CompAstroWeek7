@@ -1,5 +1,5 @@
 module step
-  use flux
+  use flux_godunov
   use physics, only: cons2prim
   implicit none
 

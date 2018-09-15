@@ -25,8 +25,7 @@ contains
     real :: f(nu), u(nu), lambda, p(nu)
 
     f = (1./2.)*u(nu)**2
-    call cons2prim(u,p,nu)
-    lambda = p(1)
+    lambda = u(1) ! TODO THIS IS A TRASSSSHHHH
 
   end subroutine get_f
 
